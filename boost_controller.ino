@@ -28,6 +28,7 @@ double setpoint;
 double input;
 double output;
 
+
 int kp = 0.3; //proportional
 int ki = 0; //integral
 int kd = 0.1; //derivative
@@ -68,8 +69,9 @@ void loop() {
     readBoostData();
     //Serial.println(boostPressure);
 
-    //int pwm_out = solenoid_active();  //check if solenoid should activate
-    int pwm_out = solenoid_open_loop(); //manual pwm-control
+    //int pwm_out = solenoid_active();  //(closed loop) check if solenoid should activate
+    int pwm_out = solenoid_open_loop(); //(open loop) manual pwm-control
+    
     //transmitting to serial:
     pwm_tx = String((pwm_out*100)/255);
     pwm_tx += ',';
@@ -98,7 +100,7 @@ void loop() {
     u8g2.drawStr(82, 23, "Boost");
     u8g2.drawStr(82, 40, "AFR");
 
-    //boost controller behavior
+    //boost controller behavior: (shows pwm output)
     u8g2.setFont(u8g2_font_fub11_tf);
     dtostrf((float)pwmSignal, 1, 2, cstr);
     u8g2.drawStr(0, 60, cstr);
@@ -126,7 +128,7 @@ void loop() {
 int solenoid_active(void){
   //Serial.println((pwmSignal*100)/255);
 
-  if(boostPressure > 900){ //overboost protection. close solenoid
+  if(boostPressure > 900){ //overboost protection. closes solenoid
       pwmSignal = 255;
       analogWrite(outPin, pwmSignal);
       tone(6,1319,125); //warning tone
@@ -136,7 +138,7 @@ int solenoid_active(void){
     }
 
     if(boostPressure > 600){  //start PID controller
-      setpoint = 800;   //target boost value
+      setpoint = 800;   //target boost value/1000 (bar)
       input = boostPressure;
       myPID.Compute();
       pwmSignal = output;
@@ -162,6 +164,7 @@ int solenoid_open_loop(void){
       delay(500);
     }
 
+    //overboost protection
     if (boostPressure > 600){
       analogWrite(outpin, pwmSignal);
     }
