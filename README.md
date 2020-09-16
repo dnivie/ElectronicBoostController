@@ -2,6 +2,9 @@
 
 ## A boost controller enhances the behavior of your turbo by increasing response and introducing safety features against overboosting, which analog boost regulators lack. 
 
+![alt text](https://cdn.shopify.com/s/files/1/1225/7944/products/3-Port_PWM_Diagram_grande.jpg?v=1462660855 "MAC")
+
+
 ### Parts used:
  - MAC 3-way solenoid
  - Arduino Mega
