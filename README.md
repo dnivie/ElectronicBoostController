@@ -17,3 +17,5 @@
 
 The MAC valves likes to operate at around 30Hz with PWM control. I have set the digital output d11 and d12 to 30Hz (see setup-function in code).
 
+Here's the [link](https://a360.co/30CXK5K) to the gaugepod I'm using. It's design to be used with a 1.3" 128x64 oled screen with a 52mm standard automotive gaugepod.
+
