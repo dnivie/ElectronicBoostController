@@ -2,9 +2,9 @@
 
 ## A boost controller enhances the behavior of your turbo by increasing response and introduces safety-features against overboosting and lean fuel mixtures, which analog boost regulators lack. 
 
-![alt text](https://cdn.shopify.com/s/files/1/1225/7944/products/3-Port_PWM_Diagram_grande.jpg?v=1462660855 "3-way solenoid")
+![alt text](https://cdn.shopify.com/s/files/1/1225/7944/products/3-Port_PWM_Diagram_grande.jpg?v=1462660855)
 
-![alt text}(https://cdn.shopify.com/s/files/1/0189/1312/products/LSU_4_9_1000x675_1024x1024.jpg?v=1393981436 "Wideband sensor")
+![alt text](https://3a663eb0fef48c6d2d60-a88f8ebfcdb877ad223e888bfcb7f7ec.ssl.cf1.rackcdn.com/861407_x600.jpg)
 
 
 ### Parts used:
