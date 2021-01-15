@@ -6,6 +6,8 @@
 
 ![alt text](https://3a663eb0fef48c6d2d60-a88f8ebfcdb877ad223e888bfcb7f7ec.ssl.cf1.rackcdn.com/861407_x600.jpg)
 
+![alt text](https://cdn.shopify.com/s/files/1/0890/6136/products/defi-def-pdf00603s-18887449155_413x@3x.progressive.jpg)
+
 
 ### Parts used:
  - MAC 3-way solenoid
