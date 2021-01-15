@@ -97,9 +97,9 @@ double setpoint;
 double input;
 double output;
 
-int kp = 5; //proportional
+int kp = 2; //proportional
 int ki = 0; //integral
-int kd = 3; //derivative
+int kd = 7; //derivative
 
 PID myPID(&input, &output, &setpoint, kp, ki, kd, P_ON_M, DIRECT);
 //P_ON_M specifies that Proportional on Measurement be used
@@ -122,7 +122,6 @@ void setup() {
   startMillis = millis();
   startPeakMillis = millis();
 
-  //input = analogRead(A1); //boost pressure
   input = boostPressure;
   setpoint = 800;   //peak boost/1000 (bar)
 
@@ -154,7 +153,7 @@ void loop() {
     case 0: //all info display:
       u8g2.firstPage();
       do {
-        draw();
+        draw(); //enable bitmap graphics (this makes the display slighty slower)
         
         // Draw current pressure
         u8g2.setFont(u8g2_font_fub20_tf);
@@ -216,41 +215,6 @@ void loop() {
       } while ( u8g2.nextPage() );
       break;
   }
-
-/*
-  u8g2.firstPage();
-  do {
-    // Draw current pressure
-    u8g2.setFont(u8g2_font_fub20_tf);
-    char cstr[6];
-    dtostrf((float)boostPressure/1000, 1, 2, cstr);
-
-    u8g2.drawStr(0, 20, cstr);
-
-    // Draw peak pressure
-    u8g2.setFont(u8g2_font_fub11_tf);
-    dtostrf((float)boostMax / 1000, 1, 2, cstr);
-    int yPos = u8g2.getStrWidth(cstr);
-    u8g2.drawStr(128 - yPos, 11, cstr);
-
-    //writing
-    u8g2.setFont(u8g2_font_fub11_tf);
-    u8g2.drawStr(82, 23, "Boost");
-    u8g2.drawStr(82, 40, "AFR");
-
-    //boost controller signal
-    u8g2.setFont(u8g2_font_fub11_tf);
-    dtostrf((float)pwmSignal, 1, 2, cstr);
-    u8g2.drawStr(0, 60, cstr);
-
-    //draw afr
-    u8g2.setFont(u8g2_font_fub14_tf);
-    dtostrf((float)afrNumber, 1, 2, cstr);
-    u8g2.drawStr(0, 40, cstr);
-
-
-  } while ( u8g2.nextPage() );
-*/
 }
 
 
@@ -264,7 +228,7 @@ int solenoid_active(void){
   //Serial.println((pwmSignal*100)/255);
 
   if(boostPressure > 900 || (afrNumber > 15 && boostPressure > 700)){ // overboost or lean-protection. closes solenoid
-      pwmSignal = 255;  //closes solenoid to minimize boostpressure.
+      pwmSignal = 0;  //closes solenoid to minimize boostpressure.
       analogWrite(outPin, pwmSignal);
       //tone(6,1319,125); //warning note on pin 6
       delay(500);
@@ -272,7 +236,7 @@ int solenoid_active(void){
       //delay(500);
     }
 
-    if(boostPressure > 500){  //start PID controller when boost > 0.5 bar
+    if(boostPressure > 100){  //start PID controller when boost > 0.5 bar
       setpoint = 800;   //target boost value
       Serial.println(pwmSignal);
       input = boostPressure;
@@ -281,7 +245,7 @@ int solenoid_active(void){
       analogWrite(outPin, pwmSignal);
     }
     else{
-      pwmSignal = 0;
+      pwmSignal = 255;
       Serial.println(pwmSignal);
       analogWrite(outPin, pwmSignal); //set solenoid to open which keeps wastegate closed. minimize turbolag.
     }
@@ -331,8 +295,8 @@ float normaliseSensorData(int m){
     int tmax = 2000;
     //normalisedValue = ((m - 9) / (1023 - 9)) * (4000 - 0) - 0
 
-   return (((m-rmin) / (rmax - rmin)) * (tmax - tmin) + tmin);
-   //return (m-9)/0.253;
+   //return (((m-rmin) / (rmax - rmin)) * (tmax - tmin) + tmin);
+   return (m-9)/0.253;
 }
 
 
