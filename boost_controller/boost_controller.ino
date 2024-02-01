@@ -2,10 +2,10 @@
 #include <U8g2lib.h>
 #include <SPI.h>
 #include <Wire.h>
-#include <PID_v1.h>
 #include "Kalman.h"
 #include "Sensorread.h"
 #include "Graphics.h"
+#include "Solenoid.h"
 
 // https://playground.arduino.cc/Code/PIDLibraryAdaptiveTuningsExample/
 // https://playground.arduino.cc/Code/PIDLibraryPonMExample/
@@ -36,10 +36,8 @@ int pwmSignal;
 Kalman kf;
 Sensor sensor;
 Graphics screen;
+Solenoid ebc;
 
-//PID myPID(&input, &output, &setpoint, kp, ki, kd, P_ON_E, DIRECT);
-// P_ON_M specifies that Proportional on Measurement be used
-// P_ON_E (Proportional on Error) is the default behavior
 
 void setup() {
   // uno/nano:
@@ -51,15 +49,12 @@ void setup() {
   TCCR1B = TCCR1B & B11111000 | B00000101;    // set timer 1 divisor to  1024 for PWM frequency of 30.64 Hz (d11 & d12)
   //TCCR2B = TCCR2B & B11111000 | B00000111;    // set timer 2 divisor to  1024 for PWM frequency of 30.64 Hz (d9 & d10)
 
-  pinMode(outPin, OUTPUT);
   Serial.begin(9600);
   startMillis = millis();
   startPeakMillis = millis();
   kf.init(noiseCovariance);
   screen.init();
-
-  input = boostPressure;
-  myPID.SetMode(AUTOMATIC);
+  ebc.init();
 }
 
 
@@ -80,6 +75,7 @@ void loop(void)
     afr = sensor.readAfr();
     afr = kf.filter(afr);
 
+    ebc.open_loop(boostPressure, afr);
     //int pwm_out = solenoid_active(boostPressure, lean);  // check if solenoid should activate (closed-loop)
     //int pwm_out = solenoid_open_loop(boostPressure, lean); // manual pwm-control (open-loop)
 

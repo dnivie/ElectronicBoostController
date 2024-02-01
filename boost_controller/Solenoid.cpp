@@ -1,6 +1,39 @@
+#include "Solenoid.h"
+#include <Arduino.h>
+#include <PID_v1.h>
 
 
+const uint16_t setpoint = 800;   //peak boost/1000 (bar)
+float input;
+float output;
+uint8_t kp = 10; //proportional gain
+uint8_t ki = 0; //integral gain
+uint8_t kd = 0.5; //derivative gain
+uint8_t outPin = 11;  // output pin for solenoid
+uint16_t pwmSignal;
 
+void Solenoid::init()
+{
+    input = boostPressure;
+    myPID.SetMode(AUTOMATIC);
+    pinMode(outPin, OUTPUT);
+    //PID myPID(&input, &output, &setpoint, kp, ki, kd, P_ON_E, DIRECT);
+    // P_ON_M specifies that Proportional on Measurement be used
+    // P_ON_E (Proportional on Error) is the default behavior
+}
+
+void Solenoid::open_loop(float boostPressure, float afr)
+{
+    // if building boost pressure -> give pwm signal to solenoid
+    // if boostpressure above max -> 100% pwm signal to solenoid
+    // create failsafe when high afr value
+}
+
+void Solenoid::closed_loop(){}
+
+void Solenoid::lean_check(){}
+
+/*
 // PID controlled solenoid
 int solenoid_active(float boostPressure, bool lean){
   //Serial.println((pwmSignal*100)/255);
@@ -64,3 +97,4 @@ bool leanCheck(float boost, float afr){
 
   return leanMixture;
 }
+*/
